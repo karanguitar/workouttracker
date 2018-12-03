@@ -4,9 +4,9 @@ import WorkOutForm from './WorkOutForm'
 class FitnessDayForm extends Component {
     render() {
         return (
-            <div>
+            <div className="form__form form__form-p2">
                 <h1>Day {this.props.day}</h1>
-                <WorkOutForm />
+                <WorkOutForm day={this.props.day}/>
             </div>
         );
     }
