@@ -1,62 +1,55 @@
 import React, { Component } from 'react';
 import FitnessDayForm from './FitnessDayForm'
+import StepProcess from './StepProcess'
 
 class FitnessForm extends Component {
     
     constructor(props){
         super(props)
         this.state = {
-            DaysUserWorksout: [0],
+            DaysUserWorksout: [],
             showDayForm: false,
-
+            countForNextPreviousButton: 0
         }
     }
 
+    handleChange = (event) =>{
+        let tagetValue = event.target.value
+        let stringToConcat = "Day "
+        let dayArray = []
 
-    incrementNumber = (number) =>{
-        
-            let newNumber = number + 1;
+        for(let i=1; i<= tagetValue; i++){
+           let newDay = stringToConcat + i
+           dayArray.push(newDay)
+        }
 
         this.setState({
-            DaysUserWorksout: this.state.DaysUserWorksout.concat(newNumber)
+            DaysUserWorksout: dayArray
         })
-        console.log(this.state)
+
     }
-
-
-
-
-    renderForm = () =>{
-
-        this.state.DaysUserWorksout.forEach(() =>{
-            return (
-                <div>
-                    <FitnessDayForm day={`${this.state.count}`} className={this.state.DaysUserWorksout}/>
-                    <button className="btn btn--blue form__button" onClick={() => this.incrementNumber(this.state.DaysUserWorksout[-1])}>Next</button>
-                </div>
-                )
-        })
         
-    }
-
     onSubmit = (event) =>{
         
         event.preventDefault()
-        
-        let stateCopy = this.state.DaysUserWorksout
-        let newList = stateCopy.map((item) =>{
-            return item + 1
-        })
 
         this.setState({
-            DaysUserWorksout: newList,
             showDayForm: true
         })
-        console.log(this.state)
     }
 
     render() {
-        
+
+        let renderForm = this.state.DaysUserWorksout.map((day) =>
+        (
+            <div key={day}>
+                <h1>{day}</h1>
+                <FitnessDayForm day={day} />
+            </div>
+            )
+            
+        )
+    
         return (
             <div className="form">
                
@@ -66,16 +59,15 @@ class FitnessForm extends Component {
                     <h1 className="heading-primary">How many days do you workout?</h1>
 
                     <input className="form__input form__input--number" type="number" max="7" min="1" 
-                        onClick={() => this.incrementNumber(this.state.DaysUserWorksout.length -1)}
-                        name="DaysUserWorksout"
-                        value={this.state.DaysUserWorksout[-1]}
+                        id="inputCount"
+                        onChange={this.handleChange}
                         />
 
                     <button className="btn btn--green form__button" type="submit">Submit</button>
                     
                 </form>
                 
-                {this.state.showDayForm ? this.renderForm() : null}
+                {this.state.showDayForm ? <StepProcess renderForm={renderForm} />  : null}
 
             </div>
         );
